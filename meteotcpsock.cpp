@@ -709,7 +709,7 @@ void MeteoTcpSock::displayError(QAbstractSocket::SocketError socketError)
 
 }
 
-void MeteoTcpSock::sendData( char *data)
+void MeteoTcpSock::sendData(const char *data)
 {
     if (model)
     {

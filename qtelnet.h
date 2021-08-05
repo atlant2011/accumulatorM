@@ -37,7 +37,7 @@ public:
      * @param tracker
      */
     static void telnet_disconnect(qtelnet &tracker);
-    static void send_text(qtelnet &tracker, const char *text, int len);
+    static void send_text(qtelnet * tracker, const char *text, int len);
 
     qtelnet();
     ~qtelnet();

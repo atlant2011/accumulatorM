@@ -174,7 +174,7 @@ void Grimm::reOpen(QString *ip, quint16 *port)
     int r = qtelnet::telnet_connect(*tracker,
                                     ip->toStdString().c_str(),
                                     _port.toStdString().c_str());
-    if (r == 0) {
+    if ((r == 0) && (tracker) && (tracker->connected)) {
         // Connection success
         connected = true;
     //    QObject::connect(this, SIGNAL(Grimm::dataIsReady(bool*, QMap<QString, float>*, QMap<QString, int>*)), parent, SLOT(parent->fillSensorData(bool*, QMap<QString, float>*, QMap<QString, int>*)));
@@ -348,10 +348,15 @@ void Grimm::rand()
 
 void Grimm::detect()
 {
-if (!tracker->worker_running)
-{
-connected  = false;
-}
+    if (!tracker) 
+    { 
+        connected  = false; 
+        return;
+    }
+    if (!tracker->worker_running)
+    {
+        connected  = false;
+    }
 
 }
 
@@ -472,8 +477,20 @@ void Grimm::send_go()
 {
     QByteArray _go =  QByteArray("v");
 
-    //Grimm command for acqusition
-    qtelnet::send_text(*tracker,
-                       _go.toStdString().c_str(),
-                       _go.length());
+    if (!tracker)
+    {
+        qDebug() << "Not initialize tracker(Grimm) Telnet \n\r";
+        return;
+    }
+    if ((tracker) && (! tracker->connected))
+    {
+        qDebug() << "No connection to Grimm via Telnet \n\r";
+    }
+    else
+    {
+        //Grimm command for acqusition
+        qtelnet::send_text(tracker,
+                           _go.toStdString().c_str(),
+                           _go.length());
+    }
 }

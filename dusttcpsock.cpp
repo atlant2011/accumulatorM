@@ -206,7 +206,7 @@ void DustTcpSock::displayError(QAbstractSocket::SocketError socketError)
 
 }
 
-void DustTcpSock::sendData( char *data)
+void DustTcpSock::sendData(const char *data)
 {
     if (strcmp(data, "RDMN")==0)
         last_command = RDMN;

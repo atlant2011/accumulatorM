@@ -37,7 +37,7 @@ public:
     float compare(float _in, float _prev);
     float compare(float _in, float _prev, float coeff);
 
-    void sendData(char *data);
+    void sendData(const char *data);
 
 
 protected:

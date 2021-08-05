@@ -62,6 +62,11 @@ int qtelnet::telnet_connect(qtelnet &tracker,
         { -1, 0, 0 }
     };
     telnet = telnet_init(telopts, telnet_event_handler, 0, &tracker);
+    if (!telnet)
+    {
+        cerr << "ERROR: qtelnet tracker not initialize [telnet]\n";
+        return 5;
+    }
 
     tracker.sockfd = sock;
     tracker.telnet = telnet;
@@ -100,13 +105,23 @@ void qtelnet::telnet_disconnect(qtelnet &tracker)
     }
 }
 
-void qtelnet::send_text(qtelnet &tracker, const char *text, int len)
+void qtelnet::send_text(qtelnet * tracker, const char *text, int len)
 {
     static char crlf[] = { '\r', '\n' };
+    if (!tracker)
+    {
+        cerr << "NOT INITIALIZED: Fail sending: '" << text << "'\n";
+        return;
+    }
+    if (! tracker->connected )
+    {
+        cerr << "NOT CONNECTED: Fail sending: '" << text << "'\n";
+        return;
+    }
 
     cout << "Sending: '" << text << "'\n";
-    telnet_send(tracker.telnet, text, len);
-    telnet_send(tracker.telnet, crlf, 2);
+    telnet_send(tracker->telnet, text, len);
+    telnet_send(tracker->telnet, crlf, 2);
 }
 
 qtelnet::qtelnet()

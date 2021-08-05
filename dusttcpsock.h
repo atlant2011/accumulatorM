@@ -32,7 +32,7 @@ public:
     DustTcpSock(QObject *parent, QString *ip, quint16 *port);
     virtual ~DustTcpSock();
 
-    void sendData(char *data);
+    void sendData(const char *data);
 
 
 protected:
